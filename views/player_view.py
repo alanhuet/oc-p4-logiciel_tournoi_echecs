@@ -1,4 +1,4 @@
-
+from models.player import Player
 
 
 class PlayerView:
@@ -7,11 +7,39 @@ class PlayerView:
         print("\n" + "="*34)
         print("=" + " "*9 + "NOUVEAU JOUEUR" + " "*9 + "=")
         print("="*34 + "\n")
+        
+        while True:
+            last_name = input("Nom de famille : ")
+            try:
+                Player.validate_last_name(last_name)
+                break
+            except Exception as e:
+                self.show_error_message(e)
 
-        last_name = input("Nom de famille : ")
-        first_name = input("Prénom : ")
-        birth_date = input("Date de naissance (JJ/MM/AAAA) : ")
-        chess_id = input("Identifiant National d'échecs (ex: AB12345) : ")
+        while True:
+            first_name = input("Prénom : ")
+            try:
+                Player.validate_first_name(first_name)
+                break
+            except Exception as e:
+                self.show_error_message(e)
+
+        while True:
+            birth_date = input("Date de naissance (JJ/MM/AAAA) : ")
+            try:
+                Player.validate_birth_date(birth_date)
+                break
+            except Exception as e:
+                self.show_error_message(e)
+
+
+        while True:
+            chess_id = input("Identifiant National d'échecs (ex: AB12345) : ")
+            try:
+                Player.validate_chess_id(chess_id)
+                break
+            except Exception as e:
+                self.show_error_message(e)
 
         return {
             "last_name": last_name,
