@@ -1,0 +1,16 @@
+
+
+# Python
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# Environnements virtuels (si tu en utilises un)
+env/
+venv/
+.venv/
+
+# IDE
+.vscode/
