@@ -34,7 +34,7 @@ class PlayerView:
 
 
         while True:
-            chess_id = input("Identifiant National d'échecs (ex: AB12345) : ")
+            chess_id = input("Identifiant National d'échecs (ex: AB12345) laissez vide si pas d'identifiant : ")
             try:
                 Player.validate_chess_id(chess_id)
                 break
