@@ -55,3 +55,16 @@ class PlayerView:
     def show_error_message(self, error_message):
         """ Displays a validation error. """
         print(f"\n[ERREUR] {error_message}")
+
+    def display_player_list(self, players):
+        print("\n" + "-"*29)
+        print("|" + " "*5 + "Liste des joueurs" + " "*5 + "|")
+        print("-"*29)
+        print("\n" + f"{'NOM':<15} | {'PRÉNOM':<15} | {'ID JOUEUR':<10}")
+        print("-"*50)
+
+        for p in players:
+            print(f"{p.last_name.upper():<15} | {p.first_name.capitalize():<15} | {p.player_id:<10}")
+
+        print("="*50)
+        input("\nAppuyez sur Entrée pour revenir au menu.")

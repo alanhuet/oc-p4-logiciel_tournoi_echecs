@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from models.exceptions import FirstNameTooShortException, LastNameTooShortException, InvalidChessIDException, InvalidBirthDateException
+from models.exceptions import FirstNameTooShortException, LastNameTooShortException, InvalidChessIDException, InvalidDateException
 
 class Player:
     last_id = 0
@@ -23,7 +23,7 @@ class Player:
             return birth_date
         
         except ValueError:
-            raise InvalidBirthDateException()
+            raise InvalidDateException()
         
     @staticmethod
     def validate_chess_id(chess_id):
@@ -35,18 +35,24 @@ class Player:
 
 
 
-    def __init__(self, last_name, first_name, birth_date, chess_id):
+    def __init__(self, last_name, first_name, birth_date, chess_id, player_id=None):
          
         self.last_name = self.validate_last_name(last_name)
         self.first_name = self.validate_first_name(first_name)
         self.birth_date = self.validate_birth_date(birth_date)
         self.chess_id = self.validate_chess_id(chess_id)
+
         Player.last_id += 1
-        self.player_id = Player.last_id
+        if player_id:
+            self.player_id = player_id
+        else:
+            self.player_id = Player.last_id
+    
 
     def to_dict(self):
         """ Transforms the instance into a dictionary for JSON. """
         return {
+            "player_id": self.player_id,
             "last_name": self.last_name,
             "first_name": self.first_name,
             "birth_date": self.birth_date,

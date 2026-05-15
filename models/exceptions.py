@@ -16,7 +16,7 @@ class InvalidChessIDException(ChessProjectException):
     def __init__(self):
         super().__init__("L'identifiant national est invalide. Format attendu : AB12345")  
 
-class InvalidBirthDateException(ChessProjectException):
+class InvalidDateException(ChessProjectException):
     def __init__(self):
         super().__init__("Format de date invalide ! (Format attendu : JJ/MM/AAAA)")     
 
@@ -27,14 +27,6 @@ class TournamentNameTooShortException(ChessProjectException):
 class TournamentLocationTooShortException(ChessProjectException):
     def __init__(self, location=""):
         super().__init__(f"Le nom {location} est trop court ! (2 caractères minimum)") 
-
-class InvalidStartDateException(ChessProjectException):
-    def __init__(self):
-        super().__init__("Format de date invalide ! (Format attendu : JJ/MM/AAAA)")
-
-class InvalidEndDateException(ChessProjectException):
-    def __init__(self):
-        super().__init__("Format de date invalide ! (Format attendu : JJ/MM/AAAA)")      
 
 class EndDateTooSoonException(ChessProjectException):
     def __init__(self):

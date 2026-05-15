@@ -1,6 +1,6 @@
 
 from datetime import datetime
-from models.exceptions import TournamentNameTooShortException, TournamentLocationTooShortException, InvalidStartDateException, InvalidEndDateException, EndDateTooSoonException
+from models.exceptions import TournamentNameTooShortException, TournamentLocationTooShortException, InvalidDateException, EndDateTooSoonException
 
 class Round:
     def __init__(self, name, matches=None):
@@ -28,6 +28,7 @@ class Round:
         return round_inst
     
 class Tournament:
+    last_id = 0
 
     @staticmethod
     def validate_tournament_name(name):
@@ -47,7 +48,7 @@ class Tournament:
             datetime.strptime(start_date, "%d/%m/%Y")
             return start_date
         except ValueError:
-            raise InvalidStartDateException()
+            raise InvalidDateException()
         
     @staticmethod
     def validate_end_date(end_date):
@@ -55,7 +56,7 @@ class Tournament:
             datetime.strptime(end_date, "%d/%m/%Y")
             return end_date
         except ValueError:
-            raise InvalidEndDateException()    
+            raise InvalidDateException()    
         
     @staticmethod
     def validate_tournament_dates(start_date, end_date):
@@ -66,7 +67,7 @@ class Tournament:
             raise EndDateTooSoonException()
         return True    
             
-    def __init__(self, name, location, start_date, end_date, description, rounds_count=4):
+    def __init__(self, name, location, start_date, end_date, description, rounds_count=4, tournament_id=None):
         self.name = self.validate_tournament_name(name)
         self.location = self.validate_tournament_location(location)
         self.start_date = self.validate_start_date(start_date)
@@ -78,8 +79,15 @@ class Tournament:
         self.players = []
         self.rounds = []
 
+        Tournament.last_id += 1
+        if tournament_id:
+            self.tournament_id = tournament_id
+        else:
+            self.tournament_id = Tournament.last_id
+
     def to_dict(self):
         return {
+            "tournament_id": self.tournament_id,
             "name": self.name,
             "location": self.location,
             "start_date": self.start_date,
