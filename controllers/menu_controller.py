@@ -8,7 +8,6 @@ class AppController:
         self.view = AppView()
         self.player_control = PlayerController()
         self.tournament_control = TournamentController()
-        self.tournament_select = TournamentController()
 
     def run(self):
 
@@ -43,10 +42,9 @@ class AppController:
             if choice == "1":
                 self.tournament_control.create_tournament()
             elif choice == "2":
-                self.tournament_select.manage_tournament_participants()
+                self.tournament_control.manage_tournament_participants()
             elif choice == "3":
-                #reprise d'un tournoi
-                ...
+                self.tournament_control.play_tournament()
             elif choice == "4":
                 break
 

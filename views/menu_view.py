@@ -28,7 +28,7 @@ class AppView:
         print("=" + " "*10 + "GESTION DES TOURNOIS" + " "*10 + "=")
         print("="*42 + "\n")
         print("1. Créer un nouveau tournoi")
-        print("2. Gérer les participants (Ajouter/Retirer)")
+        print("2. Ajouter des participants")
         print("3. Lancer / Reprendre un tournoi")
         print("4. Retour au menu principal")
 

@@ -97,4 +97,90 @@ class TournamentController:
             except ValueError:
                 self.view.show_error_message("saisie Invalide. Entrez un ID numérique ou 'q' pour quitter.")                
                 
-    
+    def play_tournament(self):
+        tournament = self.select_tournament()
+        if not tournament:
+            return
+        
+        while True:
+            if tournament.current_round > tournament.rounds_count:
+                self.view.show_error_message(f"Le tournoi '{tournament_name}' est terminé.")
+                break
+
+            round_in_progress = len(tournament.rounds) >= tournament.current_round
+
+            choice = self.view.display_tournament_play_menu(
+                tournament.name,
+                tournament.current_round,
+                round_in_progress
+            )
+
+            if choice == "1":
+                if not round_in_progress:
+                    self.start_next_round(tournament)
+                else:
+                    self.close_current_round(tournament)
+            elif choice == "2":
+                break
+            else:
+                self.view.show_error_message("Option invalide.")
+
+    def start_next_round(self, tournament):
+        """ Manages security and initiates the round. """
+        # Security 1: even number of players
+        if len(tournament.players) % 2 != 0:
+            self.view.show_error_message(" Le nombre de joueurs doit être pair pour démarrer.")
+            return
+        
+        # Security 2: Player/Round Ratio
+        if len(tournament.players) < (tournament.rounds_count * 2):
+            self.view.show_error_message(f"Il faut au moins {tournament.rounds_count * 2} joueurs inscrit au tournoi.")
+            return
+        
+        from models.round import Round
+        round_name = f"round {tournament.current_round}"
+        matches = []
+
+        if tournament.current_round == 1:
+            # random player mix
+            import random
+            shuffled_players = tournament.players[:]
+            random.shuffle(shuffled_players)
+
+            for i in range(0, len(shuffled_players), 2):
+                match = ([shuffled_players[i], 0.0], [shuffled_players[i+1], 0.0])
+                matches.append(match)
+
+        else:
+            # Les rounds suivants seront codés ici plus tard
+            ...
+
+        new_round = Round(name=round_name, matches=matches)
+        tournament.rounds.append(new_round)
+        self.save_all_tournaments()
+
+        self.view.display_round_pairings(new_round.name, new_round.matches)
+
+    def close_current_round(self, tournament):
+        """ Manages data entry, score validation, and progression to the next round. """
+        current_round_obj = tournament.rounds[-1]
+
+        while True:
+            # score entry
+            for i, (p1_data, p2_data) in enumerate(current_round_obj.matches, 1):
+                s1, s2 = self.view.prompt_for_match_score(i, p1_data[0], p2_data[0])
+                p1_data[1] = s1
+                p2_data[1] = s2
+
+            # Request for validation of the summary
+            if self.view.display_round_summary(current_round_obj.matches):
+                current_round_obj.mark_as_completed()
+                tournament.current_round += 1
+                self.save_all_tournaments()
+                print(f"\n[SUCCCÈS] {current_round_obj.name} clôturé. Passage au round {tournament.current_round}.")
+                break
+            else:
+                print("\n[INFO] Retour à la saisie des scores.")
+
+
+
